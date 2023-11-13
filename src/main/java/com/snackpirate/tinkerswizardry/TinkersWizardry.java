@@ -1,10 +1,10 @@
 package com.snackpirate.tinkerswizardry;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.world.level.block.Blocks;
+import com.snackpirate.tinkerswizardry.modifiers.TWModifierProvider;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
@@ -16,6 +16,8 @@ public class TinkersWizardry
 
     public TinkersWizardry()
     {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(this);
+        TWModifierProvider.MODIFIERS.register(bus);
     }
 }
