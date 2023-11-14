@@ -1,6 +1,5 @@
 package com.snackpirate.tinkerswizardry.modifiers;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -17,13 +16,13 @@ public class FireballingModifier extends SpellModifier
     @Override
     protected void castSpell(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source)
     {
-        LogUtils.getLogger().info("fireball cast!");
         //copied from TiC Firebreath Modifier. soz
         player.playNotifySound(SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 2.0F, (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
         if (!player.level.isClientSide)
         {
             Vec3 lookVec = player.getLookAngle().multiply(2.0f, 2.0f, 2.0f);
             SmallFireball fireball = new SmallFireball(player.level, player, lookVec.x + player.getRandom().nextGaussian() / 16, lookVec.y, lookVec.z + player.getRandom().nextGaussian() / 16);
+            lookVec = lookVec.multiply(0.5D, 0.5D, 0.5D);
             fireball.setPos(fireball.getX()+lookVec.x, player.getY(0.5D) + 0.5D+lookVec.y, fireball.getZ()+lookVec.z);
             player.level.addFreshEntity(fireball);
         }
