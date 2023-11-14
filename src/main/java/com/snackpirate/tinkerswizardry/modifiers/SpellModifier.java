@@ -18,7 +18,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
 public class SpellModifier extends InteractionModifier.NoLevels implements GeneralInteractionModifierHook
 {
-    protected static final int SPELL_COST = 5;
+    public static final int SPELL_COST = 5;
     @Override
     protected void registerHooks(ModifierHookMap.Builder hookBuilder) {
         super.registerHooks(hookBuilder);
@@ -28,9 +28,14 @@ public class SpellModifier extends InteractionModifier.NoLevels implements Gener
     @Override
     public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source)
     {
-        if (!player.level.isClientSide())
+        if (subtractOverslime(tool))
         {
-            castSpell(tool, modifier, player, hand, source);
+            if (!player.level.isClientSide())
+            {
+                player.getCooldowns().addCooldown(tool.getItem(), 20);
+                castSpell(tool, modifier, player, hand, source);
+            }
+            player.swing(hand);
             return InteractionResult.PASS;
         }
         return InteractionResult.FAIL;
@@ -38,17 +43,12 @@ public class SpellModifier extends InteractionModifier.NoLevels implements Gener
 
     protected void castSpell(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source)
     {
-        if (tool.getPersistentData().contains(new ResourceLocation("tconstruct:overslime"),(int)Tag.TAG_INT) && subtractOverslime(tool))
-        {
-            LogUtils.getLogger().info("spell cast!");
-        }
-        else { LogUtils.getLogger().info("no overslime :("); }
+        LogUtils.getLogger().info("spell cast!");
     }
 
     protected boolean subtractOverslime(IToolStackView tool)
     {
         ResourceLocation overslime = new ResourceLocation("tconstruct:overslime");
-        LogUtils.getLogger().info("overslime: " + tool.getPersistentData().get(new ResourceLocation("tconstruct:overslime")));
         if (tool.getPersistentData().contains(overslime, Tag.TAG_INT) && tool.getPersistentData().getInt(overslime)>=SPELL_COST)
         {
             tool.getPersistentData().putInt(overslime, tool.getPersistentData().getInt(overslime)-SPELL_COST);
