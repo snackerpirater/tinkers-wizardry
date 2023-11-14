@@ -17,6 +17,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = '0.0.1-1.18.2'
 group = 'com.snackpirate.tinkerswizardry' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -27,7 +28,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'parchment', version: "${parchment_version}-${mc_version}"
     runs {
         client {
             workingDirectory project.file('run')
@@ -106,18 +107,13 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.14'
 
-    // Copypasted from Tinkers' Expansion. Not even a modicum of shame.
+    // Copypasted from Tinkers' Expansion. Nerry a modicum of shame.
     implementation fg.deobf("slimeknights.mantle:Mantle:${mc_version}-${mantle_version}")
     implementation fg.deobf("slimeknights.tconstruct:TConstruct:${mc_version}-${tic_version}")
 
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
 
 }
 
-// Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([

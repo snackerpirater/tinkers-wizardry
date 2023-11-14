@@ -12,7 +12,6 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 public class FireballingModifier extends SpellModifier
 {
-    public static final int SPELL_COST = 20;
     @Override
     protected void castSpell(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source)
     {
