@@ -12,7 +12,7 @@ public class TWModifierProvider extends AbstractModifierProvider
 {
     public static final ModifierDeferredRegister MODIFIERS = ModifierDeferredRegister.create(TinkersWizardry.MOD_ID);
     public static final StaticModifier<Modifier> SPELL = MODIFIERS.register("test_spell", SpellModifier::new);
-    public static final StaticModifier<Modifier> FIREBALLING = MODIFIERS.register("fireballing", FireballingModifier::new);
+    public static final StaticModifier<Modifier> FIREBALLING = MODIFIERS.register("fireballing", () -> new FireballingModifier(1000));
 
     public TWModifierProvider(DataGenerator g)
     {
