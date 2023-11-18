@@ -11,8 +11,10 @@ import slimeknights.tconstruct.library.modifiers.util.StaticModifier;
 public class TWModifierProvider extends AbstractModifierProvider
 {
     public static final ModifierDeferredRegister MODIFIERS = ModifierDeferredRegister.create(TinkersWizardry.MOD_ID);
-    public static final StaticModifier<Modifier> SPELL = MODIFIERS.register("test_spell", SpellModifier::new);
+    public static final StaticModifier<Modifier> SPELL = MODIFIERS.register("test_spell", () -> new SpellModifier(0));
     public static final StaticModifier<Modifier> FIREBALLING = MODIFIERS.register("fireballing", () -> new FireballingModifier(1000));
+
+    public static final StaticModifier<Modifier> CHARGE_SPELL = MODIFIERS.register("charging_test", () -> new ChargeableTestModifier(0));
 
     public TWModifierProvider(DataGenerator g)
     {
@@ -22,7 +24,7 @@ public class TWModifierProvider extends AbstractModifierProvider
     @Override
     protected void addModifiers()
     {
-        addModifier(new ModifierId(TinkersWizardry.MOD_ID, "spell"), new SpellModifier());
+
     }
 
     @Override
