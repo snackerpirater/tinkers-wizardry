@@ -14,7 +14,7 @@ public class TWModifierProvider extends AbstractModifierProvider
     public static final StaticModifier<Modifier> SPELL = MODIFIERS.register("test_spell", () -> new SpellModifier(0));
     public static final StaticModifier<Modifier> FIREBALLING = MODIFIERS.register("fireballing", () -> new FireballingModifier(1000));
 
-    public static final StaticModifier<Modifier> CHARGE_SPELL = MODIFIERS.register("lightninging", () -> new ChargeableTestModifier(0));
+    public static final StaticModifier<Modifier> LIGHTNINGING = MODIFIERS.register("lightninging", () -> new LightningingModifier(0));
 
     public TWModifierProvider(DataGenerator g)
     {

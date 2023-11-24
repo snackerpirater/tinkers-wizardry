@@ -1,7 +1,8 @@
 package com.snackpirate.tinkerswizardry.modifiers;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -12,14 +13,13 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
-public class ChargeableTestModifier extends SpellModifier implements GeneralInteractionModifierHook
+public class LightningingModifier extends SpellModifier
 {
-    public ChargeableTestModifier(int capacity) {
+    public LightningingModifier(int capacity) {
         super(capacity);
     }
 
@@ -43,12 +43,12 @@ public class ChargeableTestModifier extends SpellModifier implements GeneralInte
         double boltY = player.level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)boltX, (int)boltZ);
         bolt.setPos(new Vec3(boltX, boltY, boltZ));
         player.level.addFreshEntity(bolt);
-        LogUtils.getLogger().info("charge test cast");
     }
 
     @Override
     public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
         if (source == InteractionSource.RIGHT_CLICK && !tool.isBroken()) {
+            if (!player.level.isClientSide) player.playNotifySound(SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.PLAYERS, 2.0F, (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
             ModifierUtil.startUsingItem(tool, modifier.getId(), player, hand);
             return InteractionResult.CONSUME;
         }
@@ -58,7 +58,6 @@ public class ChargeableTestModifier extends SpellModifier implements GeneralInte
     @Override
     public void onUsingTick(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft)
     {
-        if (!entity.level.isClientSide()) LogUtils.getLogger().info("charge test tick");
         Player player = (Player)entity;
         Vec3 playerPos = player.getEyePosition();
         int chargeTime = this.getUseDuration(tool, modifier) - timeLeft;
@@ -78,10 +77,10 @@ public class ChargeableTestModifier extends SpellModifier implements GeneralInte
     public boolean onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft)
     {
         if (!entity.getLevel().isClientSide) {
-            LogUtils.getLogger().info("stopped using " + (getUseDuration(tool, modifier) - timeLeft));
             this.castSpell(tool, modifier, (Player)entity, entity.getUsedItemHand(), InteractionSource.RIGHT_CLICK, (getUseDuration(tool, modifier) - timeLeft));
             ((Player) entity).getCooldowns().addCooldown(tool.getItem(), coolDownTime());
         }
+        entity.swing(entity.getUsedItemHand());
         return false;
     }
 }
