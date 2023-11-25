@@ -24,7 +24,7 @@ public class LightningingModifier extends SpellModifier
     }
 
     @Override
-    protected int coolDownTime() {
+    protected int coolDownTime(ModifierEntry modifier) {
         return 60;
     }
 
@@ -78,7 +78,7 @@ public class LightningingModifier extends SpellModifier
     {
         if (!entity.getLevel().isClientSide) {
             this.castSpell(tool, modifier, (Player)entity, entity.getUsedItemHand(), InteractionSource.RIGHT_CLICK, (getUseDuration(tool, modifier) - timeLeft));
-            ((Player) entity).getCooldowns().addCooldown(tool.getItem(), coolDownTime());
+            ((Player) entity).getCooldowns().addCooldown(tool.getItem(), this.coolDownTime(modifier));
         }
         entity.swing(entity.getUsedItemHand());
         return false;

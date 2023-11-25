@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fluids.FluidStack;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
@@ -25,7 +26,7 @@ public class SpellModifier extends TankModifier implements GeneralInteractionMod
         return 81;
     }
 
-    protected int coolDownTime() {
+    protected int coolDownTime(ModifierEntry modifier) {
         return 10;
     }
 
@@ -47,7 +48,7 @@ public class SpellModifier extends TankModifier implements GeneralInteractionMod
     public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
         if ((player.isCreative() || consumeNeeded(tool, player)) && tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
             if (!player.level.isClientSide()) {
-                player.getCooldowns().addCooldown(tool.getItem(), this.coolDownTime());
+                player.getCooldowns().addCooldown(tool.getItem(), this.coolDownTime(modifier));
                 castSpell(tool, modifier, player, hand, source);
             }
             player.swing(hand);

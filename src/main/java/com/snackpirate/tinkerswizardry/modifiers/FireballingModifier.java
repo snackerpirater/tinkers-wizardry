@@ -25,7 +25,7 @@ public class FireballingModifier extends SpellModifier
         return 81;
     }
     @Override
-    protected int coolDownTime() { return 10;}
+    protected int coolDownTime(ModifierEntry modifier) { return modifier.getLevel()*20;}
     @Override
     protected int spellCost() { return 20;}
     @Override
